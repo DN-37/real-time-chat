@@ -24,6 +24,7 @@ function Register() {
         confirmPassword: '',
     })
 
+
     const handleChange = (e) => {
         setValues({ ...values, [e.target.name]: e.target.value });
     };
