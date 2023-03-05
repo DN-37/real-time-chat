@@ -22,23 +22,29 @@ export default function SetAvatar() {
         theme: "dark",
     };
 
-    useEffect(async () => {
-        if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
-            navigate("/login");
-    }, []);
-
-    useEffect(async () => {
-        const data = [];
-        for (let i = 0; i < 9; i++) {
-            const image = await axios.get(
-                `${api}/${Math.round(Math.random() * 1000)}`
-            );
-            const buffer = new Buffer(image.data);
-            data.push(buffer.toString("base64"));
+    useEffect(() => {
+        async function fetchData() {
+            if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+                navigate("/login");
         }
-        setAvatars(data);
-        setIsLoading(false);
-    }, []);
+        fetchData();
+    }, [navigate]);
+
+    useEffect(() => {
+        async function fetchData() {
+            const data = [];
+            for (let i = 0; i < 9; i++) {
+                const image = await axios.get(
+                    `${api}/${Math.round(Math.random() * 1000)}`
+                );
+                const buffer = new Buffer(image.data);
+                data.push(buffer.toString("base64"));
+            }
+            setAvatars(data);
+            setIsLoading(false);
+        }
+        fetchData();
+    }, [api]);
 
     const setProfilePicture = async () => {
         if (selectedAvatar === undefined) {
