@@ -9,7 +9,6 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
 
   const [messages, setMessages] = useState([]);
   const [arrivalMessage, setArrivalMessage] = useState(null);
-  const scrollRef = useRef();
 
   useEffect(async () => {
     const data = await JSON.parse(
@@ -51,9 +50,6 @@ export default function ChatContainer({ currentChat, currentUser, socket }) {
     arrivalMessage && setMessages((prev) => [...prev, arrivalMessage]);
   }, [arrivalMessage]);
 
-  useEffect(() => {
-    scrollRef.current?.scrollIntoView({ behavior: "smooth" });
-  }, [messages]);
 
   return (
     <Container>
