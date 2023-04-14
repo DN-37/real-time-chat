@@ -1,20 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { allUsersRoute } from "../utils/APIRoutes";
+import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
-import ChatContainer from "../components/ChatContainer";
-import { io } from "socket.io-client";
 
-function Chat() {
+export default function Chat() {
     const navigate = useNavigate();
+    const socket = useRef();
     const [contacts, setContacts] = useState([]);
     const [currentChat, setCurrentChat] = useState(undefined);
     const [currentUser, setCurrentUser] = useState(undefined);
-    const socket = useRef();
-
     useEffect(() => {
         async function fethcData() {
             if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
@@ -29,13 +27,6 @@ function Chat() {
         }
         fethcData();
     }, [navigate]);
-
-    useEffect(() => {
-        if (currentUser) {
-            socket.current = io(host);
-            socket.current.emit("add-user", currentUser._id);
-        }
-    }, [currentUser]);
 
     useEffect(() => {
         async function fethcData() {
@@ -61,14 +52,13 @@ function Chat() {
                     {currentChat === undefined ? (
                         <Welcome />
                     ) : (
-                        <ChatContainer currentChat={currentChat} currentUser={currentUser} socket={socket} />
+                        <ChatContainer currentChat={currentChat} socket={socket} />
                     )}
                 </div>
             </Container>
         </>
     );
 }
-
 
 const Container = styled.div`
   height: 100vh;
@@ -90,5 +80,3 @@ const Container = styled.div`
     }
   }
 `;
-
-export default Chat;
