@@ -1,13 +1,13 @@
-import React, { useState } from 'react';
-import styled from 'styled-components';
-import Logo from "../assets/logo.svg";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
+import styled from "styled-components";
 import { useNavigate, Link } from "react-router-dom";
+import Logo from "../assets/logo.svg";
 import { ToastContainer, toast } from "react-toastify";
 import "react-toastify/dist/ReactToastify.css";
-import axios from "axios";
 import { registerRoute } from "../utils/APIRoutes";
 
-function Register() {
+export default function Register() {
     const navigate = useNavigate();
     const toastOptions = {
         position: "bottom-right",
@@ -16,17 +16,21 @@ function Register() {
         draggable: true,
         theme: "dark",
     };
-
     const [values, setValues] = useState({
-        username: '',
-        email: '',
-        password: '',
-        confirmPassword: '',
-    })
+        username: "",
+        email: "",
+        password: "",
+        confirmPassword: "",
+    });
 
+    useEffect(() => {
+        if (localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
+            navigate("/");
+        }
+    }, [navigate]);
 
-    const handleChange = (e) => {
-        setValues({ ...values, [e.target.name]: e.target.value });
+    const handleChange = (event) => {
+        setValues({ ...values, [event.target.name]: event.target.value });
     };
 
     const handleValidation = () => {
@@ -53,6 +57,7 @@ function Register() {
             toast.error("Email is required.", toastOptions);
             return false;
         }
+
         return true;
     };
 
@@ -80,7 +85,7 @@ function Register() {
     };
 
     return (
-        <div>
+        <>
             <FormContainer>
                 <form action="" onSubmit={(event) => handleSubmit(event)}>
                     <div className="brand">
@@ -118,7 +123,7 @@ function Register() {
                 </form>
             </FormContainer>
             <ToastContainer />
-        </div>
+        </>
     );
 }
 
@@ -189,6 +194,3 @@ const FormContainer = styled.div`
     }
   }
 `;
-
-
-export default Register;

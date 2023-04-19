@@ -3,7 +3,6 @@ import styled from "styled-components";
 import Robot from "../assets/robot.gif";
 export default function Welcome() {
     const [userName, setUserName] = useState("");
-
     useEffect(() => {
         async function fetchData() {
             setUserName(
@@ -14,10 +13,9 @@ export default function Welcome() {
         }
         fetchData();
     }, []);
-
     return (
         <Container>
-            <img src={Robot} alt="Robot" />
+            <img src={Robot} alt="" />
             <h1>
                 Welcome, <span>{userName}!</span>
             </h1>

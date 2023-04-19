@@ -1,18 +1,18 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect, useState, useRef } from "react";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import styled from "styled-components";
 import { allUsersRoute } from "../utils/APIRoutes";
+import ChatContainer from "../components/ChatContainer";
 import Contacts from "../components/Contacts";
 import Welcome from "../components/Welcome";
-import ChatContainer from "../components/ChatContainer";
 
-function Chat() {
+export default function Chat() {
     const navigate = useNavigate();
+    const socket = useRef();
     const [contacts, setContacts] = useState([]);
     const [currentChat, setCurrentChat] = useState(undefined);
     const [currentUser, setCurrentUser] = useState(undefined);
-
     useEffect(() => {
         async function fethcData() {
             if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY)) {
@@ -52,14 +52,13 @@ function Chat() {
                     {currentChat === undefined ? (
                         <Welcome />
                     ) : (
-                        <ChatContainer currentChat={currentChat} />
+                        <ChatContainer currentChat={currentChat} socket={socket} />
                     )}
                 </div>
             </Container>
         </>
     );
 }
-
 
 const Container = styled.div`
   height: 100vh;
@@ -81,5 +80,3 @@ const Container = styled.div`
     }
   }
 `;
-
-export default Chat;
