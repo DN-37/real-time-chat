@@ -113,6 +113,7 @@ const Container = styled.div`
       border: none;
       padding-left: 1rem;
       font-size: 1.2rem;
+
       &::selection {
         background-color: #9a86f3;
       }
