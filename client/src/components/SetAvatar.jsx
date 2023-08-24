@@ -8,12 +8,11 @@ import "react-toastify/dist/ReactToastify.css";
 import { useNavigate } from "react-router-dom";
 import { setAvatarRoute } from "../utils/APIRoutes";
 export default function SetAvatar() {
-    const api = `https://api.multiavatar.com/apikey=jWywncCJ8xda31`;
+    const api = `https://api.multiavatar.com/4645646`;
     const navigate = useNavigate();
     const [avatars, setAvatars] = useState([]);
     const [isLoading, setIsLoading] = useState(true);
     const [selectedAvatar, setSelectedAvatar] = useState(undefined);
-
     const toastOptions = {
         position: "bottom-right",
         autoClose: 8000,
@@ -22,29 +21,10 @@ export default function SetAvatar() {
         theme: "dark",
     };
 
-    useEffect(() => {
-        async function fetchData() {
-            if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
-                navigate("/login");
-        }
-        fetchData();
-    }, [navigate]);
-
-    useEffect(() => {
-        async function fetchData() {
-            const data = [];
-            for (let i = 0; i < 9; i++) {
-                const image = await axios.get(
-                    `${api}/${Math.round(Math.random() * 1000)}`
-                );
-                const buffer = new Buffer(image.data);
-                data.push(buffer.toString("base64"));
-            }
-            setAvatars(data);
-            setIsLoading(false);
-        }
-        fetchData();
-    }, [api]);
+    useEffect(async () => {
+        if (!localStorage.getItem(process.env.REACT_APP_LOCALHOST_KEY))
+            navigate("/login");
+    }, []);
 
     const setProfilePicture = async () => {
         if (selectedAvatar === undefined) {
@@ -72,6 +52,18 @@ export default function SetAvatar() {
         }
     };
 
+    useEffect(async () => {
+        const data = [];
+        for (let i = 0; i < 4; i++) {
+            const image = await axios.get(
+                `${api}/${Math.round(Math.random() * 1000)}`
+            );
+            const buffer = new Buffer(image.data);
+            data.push(buffer.toString("base64"));
+        }
+        setAvatars(data);
+        setIsLoading(false);
+    }, []);
     return (
         <>
             {isLoading ? (
@@ -119,19 +111,20 @@ const Container = styled.div`
   background-color: #131324;
   height: 100vh;
   width: 100vw;
+
   .loader {
     max-inline-size: 100%;
   }
+
   .title-container {
     h1 {
       color: white;
     }
   }
   .avatars {
-    display: grid;
-    grid-template-columns: repeat(3, 1fr);
-    grid-template-rows: repeat(3, 1fr);
-    gap: 3rem;
+    display: flex;
+    gap: 2rem;
+
     .avatar {
       border: 0.4rem solid transparent;
       padding: 0.4rem;
@@ -160,7 +153,7 @@ const Container = styled.div`
     font-size: 1rem;
     text-transform: uppercase;
     &:hover {
-      background-color: #4e0ef1;
+      background-color: #4e0eff;
     }
   }
 `;
